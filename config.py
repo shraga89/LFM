@@ -6,5 +6,5 @@ bert_path = 'https://tfhub.dev/google/bert_uncased_L-12_H-768_A-12/1'
 DATA_COLUMN_A = 'candText'
 DATA_COLUMN_B = 'targText'
 LABEL_COLUMN = 'exactMatch'
-folds = 2
+folds = 5
 epochs = 5
