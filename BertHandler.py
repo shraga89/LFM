@@ -1,4 +1,3 @@
-# pip install bert-tensorflow
 import tensorflow_hub as hub
 import bert
 from bert import run_classifier

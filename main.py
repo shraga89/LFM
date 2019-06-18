@@ -1,3 +1,6 @@
+# pip install bert-tensorflow
+# pip install tensorflow_hub
+# pip install tqdm
 import DataHandler as DH
 import config as C
 import utils as U
@@ -31,7 +34,7 @@ tf.logging.set_verbosity(tf.logging.ERROR)
 # split = int((len(dh.df)*2)/3)
 res = None
 eval_res = None
-dh.df = dh.df[:10]
+# dh.df = dh.df[:10]
 kfold = KFold(C.folds, True, 1)
 label_list = [0, 1]
 i = 1
@@ -98,7 +101,7 @@ for train_ix, test_ix in kfold.split(dh.df):
     crowds_agg = CrowdsCategoricalAggregator(model,
                                              [train_input_ids, train_input_masks, train_segment_ids],
                                              dh.answers[train_ix])
-    for epoch in range(15):
+    for epoch in range(2):
         print("Epoch:", epoch + 1)
 
         # E-step
