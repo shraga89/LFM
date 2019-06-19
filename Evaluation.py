@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 
-def matchers_evaluation(df, matchers, export = False):
+def matchers_evaluation(df, matchers, export=False):
     eval = pd.DataFrame(columns=['Pair', 'Matcher', 'P', 'R', 'F'])
     i = 1
     for pair in df['instance'].unique():

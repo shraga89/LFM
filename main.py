@@ -34,7 +34,7 @@ tf.logging.set_verbosity(tf.logging.ERROR)
 # split = int((len(dh.df)*2)/3)
 res = None
 eval_res = None
-# dh.df = dh.df[:10]
+dh.df = dh.df[:10]
 kfold = KFold(C.folds, True, 1)
 label_list = [0, 1]
 i = 1
@@ -132,7 +132,7 @@ for train_ix, test_ix in kfold.split(dh.df):
     test, eval = E.eval_model(model, [test_input_ids, test_input_masks, test_segment_ids], test_labels,
                               test, eval, 'BertCrowd', False)
     res = pd.concat([res, test], ignore_index=True).drop_duplicates().reset_index(drop=True)
-    res = pd.concat([res, eval], ignore_index=True).drop_duplicates().reset_index(drop=True)
+    eval_res = pd.concat([res, eval], ignore_index=True).drop_duplicates().reset_index(drop=True)
     i += 1
 
 ts = time.time()
