@@ -34,7 +34,7 @@ tf.logging.set_verbosity(tf.logging.ERROR)
 # split = int((len(dh.df)*2)/3)
 res = None
 eval_res = None
-dh.df = dh.df[:10]
+# dh.df = dh.df[:10]
 kfold = KFold(C.folds, True, 1)
 label_list = [0, 1]
 i = 1
