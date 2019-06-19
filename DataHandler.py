@@ -4,6 +4,7 @@ from scipy.stats import mode
 import config as conf
 import utils as U
 
+
 class DataHandler:
 
     def __init__(self, file):
@@ -30,17 +31,19 @@ class DataHandler:
 
     def create_dataset(self):
         self.df = pd.DataFrame(pd.pivot_table(data=self.raw.copy(),
-                                         index=['instance', 'candName', 'targName'],
-                                         columns=['alg'],
-                                         values=['conf']
-                                         ).reset_index().reset_index())
+                                              index=['instance', 'candName', 'targName'],
+                                              columns=['alg'],
+                                              values=['conf']
+                                              ).reset_index().reset_index())
         self.df.columns = [' '.join(col).strip().replace('conf ', '') for col in self.df.columns.values]
         self.df = self.df.drop(['index'], axis=1)
 
-    def add_thresholded_flms(self, flms, ts):
+    def add_thresholded_flms(self, flms, ts, qs):
         for flm in flms:
             for t in ts:
                 self.df[flm + 't=' + str(t)] = np.where(self.df[flm] >= t, 1.0, 0.0)
+            for q in qs:
+                self.df[flm + 'q=' + str(q)] = np.where(self.df[flm] >= self.df[flm].quantile(q), 1.0, 0.0)
             self.df = self.df.drop([flm], axis=1)
         self.matchers_list = list(self.df.columns.drop(['instance', 'candName', 'targName', 'exactMatch']))
         self.N_ANNOT = len(self.matchers_list)
@@ -67,4 +70,3 @@ class DataHandler:
         self.df['candText'] = [' '.join(t.split('.')[0:max_seq_length]) for t in self.df['candNameText']]
         self.df['targNameText'] = self.df['targName'].tolist()
         self.df['targText'] = [' '.join(t.split('.')[0:max_seq_length]) for t in self.df['targNameText']]
-
