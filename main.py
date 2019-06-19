@@ -141,4 +141,4 @@ folder = './results/' + st
 if not os.path.exists(folder):
     os.makedirs(folder)
 res.to_csv(folder + '/full_results.csv', index=False)
-res.to_csv(folder + '/eval.csv', index=False)
+eval_res.to_csv(folder + '/eval.csv', index=False)
