@@ -23,7 +23,7 @@ config.gpu_options.per_process_gpu_memory_fraction = 0.95
 sess = tf.Session(config=config)
 keras.backend.set_session(sess)
 
-dh = DH.DataHandler('../MixedSmall.csv')
+dh = DH.DataHandler('../VectorsWFtrimmed.csv')
 dh.add_thresholded_flms(C.flms, C.ts, C.qs)
 dh.create_answers()
 dh.BERT_preprocess(C.max_seq_length)
