@@ -23,7 +23,7 @@ config.gpu_options.per_process_gpu_memory_fraction = 0.95
 sess = tf.Session(config=config)
 keras.backend.set_session(sess)
 
-dh = DH.DataHandler('../VectorsWFtrimmed.csv')
+dh = DH.DataHandler(C.filename, C.dftype)
 dh.add_thresholded_flms(C.flms, C.ts, C.qs)
 dh.create_answers()
 dh.BERT_preprocess(C.max_seq_length)
@@ -101,7 +101,7 @@ for train_ix, test_ix in kfold.split(dh.df):
     crowds_agg = CrowdsCategoricalAggregator(model,
                                              [train_input_ids, train_input_masks, train_segment_ids],
                                              dh.answers[train_ix])
-    for epoch in range(2):
+    for epoch in range(1):
         print("Epoch:", epoch + 1)
 
         # E-step

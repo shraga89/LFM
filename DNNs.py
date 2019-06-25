@@ -16,6 +16,7 @@ class F1score(object):
     def loss(self, y_true, y_pred):
          return f1_score(y_true, y_pred)
 
+
 def initialize_vars(sess):
     sess.run(tf.local_variables_initializer())
     sess.run(tf.global_variables_initializer())
@@ -34,7 +35,8 @@ def build_model(max_seq_length):
     pred = Dense(2, activation='softmax')(dense)
 
     model = Model(inputs=bert_inputs, outputs=pred)
-    model.compile(loss=F1score.loss(), optimizer='adam', metrics=['accuracy'])
+    # model.compile(loss=F1score.loss(), optimizer='adam', metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     return model
 
@@ -49,7 +51,9 @@ def bert_as_matcher(max_seq_length):
     pred = Dense(2, activation='softmax')(bert_output)
 
     model = Model(inputs=bert_inputs, outputs=pred)
-    model.compile(loss=F1score.loss(), optimizer='adam', metrics=['accuracy'])
+    # loss = F1score().loss
+    # model.compile(loss=loss, optimizer='adam', metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     # print(model.summary())
     return model
 
@@ -77,7 +81,7 @@ def build_crowd_model(max_seq_length, N_CLASSES, N_ANNOT):
 
     # compile model with masked loss and train
     model.compile(optimizer='adam', loss=loss)
-    print(model.summary())
+    # print(model.summary())
 
     return model
 
@@ -86,6 +90,7 @@ def remove_last_layer(model):
     model.layers.pop()
     model.layers.pop()
     model2 = Model(model.input, model.layers[-2].output)
-    model2.compile(optimizer='adam', loss=F1score.loss(), metrics=['accuracy'])
-    print(model2.summary())
+    # model2.compile(optimizer='adam', loss=F1score.loss(), metrics=['accuracy'])
+    model2.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    # print(model2.summary())
     return model2

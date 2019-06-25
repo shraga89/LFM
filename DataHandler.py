@@ -7,10 +7,15 @@ import utils as U
 
 class DataHandler:
 
-    def __init__(self, file):
+    def __init__(self, file, dftype = 'Standard'):
         self.file = file
         self.raw = None
-        self.load_raw_data()
+        if dftype == 'Standard':
+            self.load_raw_data()
+        if dftype == 'ICDM':
+            self.load_raw_data_icdm()
+        if dftype =='Entities':
+            self.load_raw_data_em()
         self.df = None
         self.create_dataset()
         self.matchers_list = None
@@ -29,6 +34,20 @@ class DataHandler:
         del mylist
         self.raw = self.raw.drop(['realConf'], axis=1)
 
+    def load_raw_data_icdm(self):
+        mylist = []
+        self.raw = None
+        for chunk in pd.read_csv(self.file, low_memory=False, chunksize=10 ** 6):
+            mylist.append(chunk)
+            self.raw = pd.concat(mylist, axis=0)
+            self.raw = self.raw.fillna(value='empty')
+        del mylist
+        self.raw['instance'], self.raw['alg'] = self.raw['instance'].str.replace(",", "+").str.split(pat="+", n=1).str
+        self.raw = self.raw.drop(['realConf'], axis=1)
+
+    def load_raw_data_em(self):
+        return None
+
     def create_dataset(self):
         self.df = pd.DataFrame(pd.pivot_table(data=self.raw.copy(),
                                               index=['instance', 'candName', 'targName'],
@@ -37,13 +56,14 @@ class DataHandler:
                                               ).reset_index().reset_index())
         self.df.columns = [' '.join(col).strip().replace('conf ', '') for col in self.df.columns.values]
         self.df = self.df.drop(['index'], axis=1)
+        self.df = self.df.rename(columns={' exactMatch': 'exactMatch'}, inplace=False)
 
     def add_thresholded_flms(self, flms, ts, qs):
         for flm in flms:
             for t in ts:
-                self.df[flm + 't=' + str(t)] = np.where(self.df[flm] >= t, 1.0, 0.0)
+                self.df[flm + '_t=' + str(t)] = np.where(self.df[flm] >= t, 1.0, 0.0)
             for q in qs:
-                self.df[flm + 'q=' + str(q)] = np.where(self.df[flm] >= self.df[flm].quantile(q), 1.0, 0.0)
+                self.df[flm + '_q=' + str(q)] = np.where(self.df[flm] >= self.df[flm].quantile(q), 1.0, 0.0)
             self.df = self.df.drop([flm], axis=1)
         self.matchers_list = list(self.df.columns.drop(['instance', 'candName', 'targName', 'exactMatch']))
         self.N_ANNOT = len(self.matchers_list)
