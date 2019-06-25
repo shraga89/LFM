@@ -93,10 +93,8 @@ for c in cands:
             e = float(exact[(exact['ltable.id'] == c) & (exact['rtable.id'] == t)]['gold'])
         feat = get_features(c, t)
         for f in feat:
-            full_cand = '.'.join(A[A['id'] == c][interest_cols].drop(columns='id',
-                                                                     axis=1).astype(str).values.tolist()[0])
-            full_targ = '.'.join(B[B['id'] == t][interest_cols].drop(columns='id',
-                                                                     axis=1).astype(str).values.tolist()[0])
+            full_cand = '.'.join(A[A['id'] == c][interest_cols].drop(['id'], axis=1).astype(str).values.tolist()[0])
+            full_targ = '.'.join(B[B['id'] == t][interest_cols].drop(['id'], axis=1).astype(str).values.tolist()[0])
             res_row = np.concatenate((np.array(str(block) + ' ' + str(f)), np.array(str(full_cand)),
                                       np.array(str(full_targ)), np.array(feat[f]), np.array(e)), axis=None)
             df.loc[epoch] = res_row
