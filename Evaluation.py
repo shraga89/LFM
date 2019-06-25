@@ -9,7 +9,7 @@ def matchers_evaluation(df, matchers, export=False):
     for pair in df['instance'].unique():
         for m in matchers:
             matcher = np.where(df[(df['instance'] == pair)][m] > 0.0, 1.0, 0.0)
-            exact = df[(df['instance'] == pair)]['exactMatch']
+            exact = np.where(df[(df['instance'] == pair)]['exactMatch'] > 0.0, 1.0, 0.0)
             p, r, f = precision_recall_fscore_support(matcher, exact, average='binary')[:3]
             eval.loc[i] = np.array([pair, m, p, r, f])
             i += 1
