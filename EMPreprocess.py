@@ -85,8 +85,8 @@ print("tagged pairs:" + str(exact['gold'].value_counts()))
 
 df = pd.DataFrame(columns=['instance', 'candName', 'targName', 'conf', 'realConf'])
 epoch = 1
-cands = list(exact['ltable.id'])
-targs = list(exact['rtable.id'])
+cands = list(exact['ltable.id'].unique())
+targs = list(exact['rtable.id'].unique())
 print(str(len(cands)), str(len(targs)))
 
 block = 1
