@@ -87,6 +87,7 @@ df = pd.DataFrame(columns=['instance', 'candName', 'targName', 'conf', 'realConf
 epoch = 1
 cands = list(exact['ltable.id'])
 targs = list(exact['rtable.id'])
+print(str(len(cands)), str(len(targs)))
 block = 1
 print('Writing dataset to file...')
 for c in cands:
@@ -102,6 +103,7 @@ for c in cands:
                                       np.array(str(full_targ)), np.array(feat[f]), np.array(e)), axis=None)
             df.loc[epoch] = res_row
             epoch += 1
+        print('Finished adding', full_targ, '<->', full_cand)
     print('Finished ', full_cand)
 
 df.to_csv('../' + ds_name + '_em_dataset.csv', index=False)
