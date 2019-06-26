@@ -86,6 +86,7 @@ epoch = 1
 cands = list(exact['ltable.id'])
 targs = list(exact['rtable.id'])
 block = 1
+print('Writing dataset to file...')
 for c in cands:
     full_cand = '.'.join(A[A['id'] == c][interest_cols].drop(['id'], axis=1).astype(str).values.tolist()[0])
     for t in targs:
