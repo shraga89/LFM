@@ -61,6 +61,7 @@ L = em.read_csv_metadata(path + 'K1.csv',
 
 # L = K1.copy()
 # print(L.columns)
+print('Loading labels...')
 L['gold'] = 0
 trues = exact[exact['gold'] == 1][['ltable.id', 'rtable.id']]
 L['temp'] = L['ltable_id'].astype(str) + L['rtable_id'].astype(str)
@@ -71,6 +72,7 @@ development_evaluation = em.split_train_test(L, train_proportion=0.5)
 development = development_evaluation['train']
 evaluation = development_evaluation['test']
 
+print('Creating feature vectors...')
 train_feature_vectors = em.extract_feature_vecs(development, attrs_after='gold',
                                                 feature_table=features)
 test_feature_vectors = em.extract_feature_vecs(evaluation, attrs_after='gold',
