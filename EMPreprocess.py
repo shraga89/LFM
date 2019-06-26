@@ -93,7 +93,7 @@ block = 1
 print('Writing dataset to file...')
 # for c in cands:
     # for t in targs:
-    
+
 for c, t in exact[['ltable.id', 'rtable.id']].values.tolist():
     print('Adding', c, '<->', t)
     e = 0
