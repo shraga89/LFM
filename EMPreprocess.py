@@ -111,4 +111,4 @@ for c, t in exact[['ltable.id', 'rtable.id']].values.tolist():
     # print('Finished ', full_cand)
 
 df.to_csv('../' + ds_name + '_em_dataset.csv', index=False)
-df.to_csv(ds_name + '_em_dataset.csv', index=False)
+# df.to_csv(ds_name + '_em_dataset.csv', index=False)
