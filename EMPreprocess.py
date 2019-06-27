@@ -103,7 +103,7 @@ for c, t in exact[['ltable.id', 'rtable.id']].values.tolist():
     for f in feat:
         full_cand = '.'.join(A[A['id'] == c][interest_cols].drop(['id'], axis=1).astype(str).values.tolist()[0])
         full_targ = '.'.join(B[B['id'] == t][interest_cols].drop(['id'], axis=1).astype(str).values.tolist()[0])
-        res_row = np.concatenate((np.array(str(block) + ' ' + str(f)), np.array(str(full_cand)),
+        res_row = np.concatenate((np.array(str(block) + ',' + str(f)), np.array(str(full_cand)),
                                   np.array(str(full_targ)), np.array(feat[f]), np.array(e)), axis=None)
         df.loc[epoch] = res_row
         epoch += 1
