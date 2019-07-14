@@ -8,6 +8,7 @@ import Evaluation as E
 import tensorflow as tf
 import BertHandler as BH
 import DNNs
+import DNNsTwo
 from crowd_layer.crowd_aggregators import CrowdsCategoricalAggregator
 import numpy as np
 import pandas as pd
@@ -55,81 +56,134 @@ for train_ix, test_ix in kfold.split(dh.df):
     # Instantiate tokenizer
     tokenizer = BH.create_tokenizer_from_hub_module()
     # Feed Pairs:
-    train_examples = BH.convert_text_to_examples_pairs(train[C.DATA_COLUMN_A],
-                                                       train[C.DATA_COLUMN_B], train[C.LABEL_COLUMN])
-    test_examples = BH.convert_text_to_examples_pairs(test[C.DATA_COLUMN_A],
-                                                      test[C.DATA_COLUMN_B], test[C.LABEL_COLUMN])
+    # train_examples = BH.convert_text_to_examples_pairs(train[C.DATA_COLUMN_A],
+    #                                                    train[C.DATA_COLUMN_B], train[C.LABEL_COLUMN])
+    # test_examples = BH.convert_text_to_examples_pairs(test[C.DATA_COLUMN_A],
+    #                                                   test[C.DATA_COLUMN_B], test[C.LABEL_COLUMN])
+
+    train_examplesA = BH.convert_text_to_examples(train[C.DATA_COLUMN_A], train[C.LABEL_COLUMN])
+    train_examplesB = BH.convert_text_to_examples(train[C.DATA_COLUMN_B], train[C.LABEL_COLUMN])
+    test_examplesA = BH.convert_text_to_examples(test[C.DATA_COLUMN_A], test[C.LABEL_COLUMN])
+    test_examplesB = BH.convert_text_to_examples(test[C.DATA_COLUMN_B], test[C.LABEL_COLUMN])
 
     # Convert to features
-    (train_input_ids, train_input_masks, train_segment_ids, train_labels_bert) = \
-        BH.convert_examples_to_features(tokenizer, train_examples, max_seq_length=C.max_seq_length)
-    (test_input_ids, test_input_masks, test_segment_ids, test_labels_bert) = \
-        BH.convert_examples_to_features(tokenizer, test_examples, max_seq_length=C.max_seq_length)
+    # (train_input_ids, train_input_masks, train_segment_ids, train_labels_bert) = \
+    #     BH.convert_examples_to_features(tokenizer, train_examples, max_seq_length=C.max_seq_length)
+    # (test_input_ids, test_input_masks, test_segment_ids, test_labels_bert) = \
+    #     BH.convert_examples_to_features(tokenizer, test_examples, max_seq_length=C.max_seq_length)
+
+    (train_input_idsA, train_input_masksA, train_segment_idsA, train_labels_bertA) = \
+        BH.convert_examples_to_features(tokenizer, train_examplesA, max_seq_length=C.max_seq_length)
+    (train_input_idsB, train_input_masksB, train_segment_idsB, train_labels_bertB) = \
+        BH.convert_examples_to_features(tokenizer, train_examplesB, max_seq_length=C.max_seq_length)
+    (test_input_idsA, test_input_masksA, test_segment_idsA, test_labels_bertA) = \
+        BH.convert_examples_to_features(tokenizer, test_examplesA, max_seq_length=C.max_seq_length)
+    (test_input_idsB, test_input_masksB, test_segment_idsB, test_labels_bertB) = \
+        BH.convert_examples_to_features(tokenizer, test_examplesB, max_seq_length=C.max_seq_length)
 
     tokenizer = BH.create_tokenizer_from_hub_module()
 
     # ------------------BERT AS A MATCHER-----------------
-    model = DNNs.bert_as_matcher(C.max_seq_length)
-
-    DNNs.initialize_vars(sess)
-
-    test, eval = E.eval_model(model, [test_input_ids, test_input_masks, test_segment_ids], test_labels,
+    # model = DNNs.bert_as_matcher(C.max_seq_length)
+    model = DNNsTwo.bert_as_matcher(C.max_seq_length)
+    DNNsTwo.initialize_vars(sess)
+    #
+    # test, eval = E.eval_model(model, [test_input_ids, test_input_masks, test_segment_ids], test_labels,
+    #                           test, eval, 'BertAsAMatcher', False)
+    test, eval = E.eval_model(model, [test_input_idsA, test_input_masksA, test_segment_idsA] +
+                              [test_input_idsB, test_input_masksB, test_segment_idsB]
+                              , test_labels,
                               test, eval, 'BertAsAMatcher', False)
     # ------------------MAJORITY VOTE MODEL---------------
     del model
-    model = DNNs.build_model(C.max_seq_length)
+    # model = DNNs.build_model(C.max_seq_length)
+    #
+    # # Instantiate variables
+    # DNNs.initialize_vars(sess)
+    #
+    # model.fit(
+    #     [train_input_ids, train_input_masks, train_segment_ids],
+    #     train_mv_labels,
+    #     validation_data=([test_input_ids, test_input_masks, test_segment_ids], test_mv_labels),
+    #     epochs=1,
+    #     batch_size=32
+    # )
+    # test, eval = E.eval_model(model, [test_input_ids, test_input_masks, test_segment_ids], test_labels,
+    #                           test, eval, 'BertMajority', False)
 
-    # Instantiate variables
-    DNNs.initialize_vars(sess)
-
+    model = DNNsTwo.build_model(C.max_seq_length)
+    DNNsTwo.initialize_vars(sess)
     model.fit(
-        [train_input_ids, train_input_masks, train_segment_ids],
+        [train_input_idsA, train_input_masksA, train_segment_idsA] +
+        [train_input_idsB, train_input_masksB, train_segment_idsB],
         train_mv_labels,
-        validation_data=([test_input_ids, test_input_masks, test_segment_ids], test_mv_labels),
+        validation_data=([test_input_idsA, test_input_masksA, test_segment_idsA] +
+                         [test_input_idsB, test_input_masksB, test_segment_idsB],
+                         test_mv_labels),
         epochs=1,
         batch_size=32
     )
-    test, eval = E.eval_model(model, [test_input_ids, test_input_masks, test_segment_ids], test_labels,
+    test, eval = E.eval_model(model, [test_input_idsA, test_input_masksA, test_segment_idsA] +
+                              [test_input_idsB, test_input_masksB, test_segment_idsB]
+                              , test_labels,
                               test, eval, 'BertMajority', False)
 
     # ------------------AGGREGATED MODEL------------------
+    # del model
+    # model = DNNs.build_model(C.max_seq_length)
+    #
+    # # Instantiate variables
+    # DNNs.initialize_vars(sess)
+    # crowds_agg = CrowdsCategoricalAggregator(model,
+    #                                          [train_input_ids, train_input_masks, train_segment_ids],
+    #                                          dh.answers[train_ix])
+    # for epoch in range(1):
+    #     print("Epoch:", epoch + 1)
+    #
+    #     # E-step
+    #     ground_truth_est = crowds_agg.e_step()
+    #     print("Adjusted ground truth accuracy:",
+    #           1.0 * np.sum(np.argmax(ground_truth_est, axis=1) == train_labels) / len(train_labels))
+    #
+    #     # M-step
+    #     model, pi = crowds_agg.m_step()
+    # test, eval = E.eval_model(model, [test_input_ids, test_input_masks, test_segment_ids], test_labels,
+    #                           test, eval, 'BertAggregator', False)
+
+    # # ------------------CROWDS----------------------------
     del model
-    model = DNNs.build_model(C.max_seq_length)
-
-    # Instantiate variables
-    DNNs.initialize_vars(sess)
-    crowds_agg = CrowdsCategoricalAggregator(model,
-                                             [train_input_ids, train_input_masks, train_segment_ids],
-                                             dh.answers[train_ix])
-    for epoch in range(1):
-        print("Epoch:", epoch + 1)
-
-        # E-step
-        ground_truth_est = crowds_agg.e_step()
-        print("Adjusted ground truth accuracy:",
-              1.0 * np.sum(np.argmax(ground_truth_est, axis=1) == train_labels) / len(train_labels))
-
-        # M-step
-        model, pi = crowds_agg.m_step()
-    test, eval = E.eval_model(model, [test_input_ids, test_input_masks, test_segment_ids], test_labels,
-                              test, eval, 'BertAggregator', False)
-
-    # ------------------CROWDS----------------------------
-    del model
-    model = DNNs.build_crowd_model(C.max_seq_length, C.N_CLASSES, dh.N_ANNOT)
-
-    DNNs.initialize_vars(sess)
-
+    #     model = DNNs.build_crowd_model(C.max_seq_length, C.N_CLASSES, dh.N_ANNOT)
+    #
+    # DNNs.initialize_vars(sess)
+    #
+    # model.fit(
+    #     [train_input_ids, train_input_masks, train_segment_ids],
+    #     train_multi_labels,
+    #     validation_data=([test_input_ids, test_input_masks, test_segment_ids], test_multi_labels),
+    #     epochs=1,
+    #     batch_size=32
+    # )
+    #
+    # model = DNNs.remove_last_layer(model)
+    # test, eval = E.eval_model(model, [test_input_ids, test_input_masks, test_segment_ids], test_labels,
+    #                           test, eval, 'BertCrowd', False)
+    model = DNNsTwo.build_crowd_model(C.max_seq_length, C.N_CLASSES, dh.N_ANNOT)
+    DNNsTwo.initialize_vars(sess)
     model.fit(
-        [train_input_ids, train_input_masks, train_segment_ids],
+        [train_input_idsA, train_input_masksA, train_segment_idsA] +
+        [train_input_idsB, train_input_masksB, train_segment_idsB],
         train_multi_labels,
-        validation_data=([test_input_ids, test_input_masks, test_segment_ids], test_multi_labels),
+        validation_data=([test_input_idsA, test_input_masksA, test_segment_idsA] +
+                         [test_input_idsB, test_input_masksB, test_segment_idsB],
+                         test_multi_labels),
         epochs=1,
         batch_size=32
     )
 
-    model = DNNs.remove_last_layer(model)
-    test, eval = E.eval_model(model, [test_input_ids, test_input_masks, test_segment_ids], test_labels,
+    model = DNNsTwo.remove_last_layer(model)
+    test, eval = E.eval_model(model, [test_input_idsA, test_input_masksA, test_segment_idsA] +
+                              [test_input_idsB, test_input_masksB, test_segment_idsB]
+                              , test_labels,
                               test, eval, 'BertCrowd', False)
     res = pd.concat([res, test], ignore_index=True).drop_duplicates().reset_index(drop=True)
     eval_res = pd.concat([eval_res, eval], ignore_index=True).drop_duplicates().reset_index(drop=True)

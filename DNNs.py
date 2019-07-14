@@ -31,7 +31,7 @@ def build_model(max_seq_length):
     bert_inputs = [in_id, in_mask, in_segment]
 
     bert_output = BH.BertLayer(n_fine_tune_layers=3)(bert_inputs)
-    dense = Dense(256, activation='relu')(bert_output)
+    dense = Dense(32, activation='relu')(bert_output)
     pred = Dense(2, activation='softmax')(dense)
 
     model = Model(inputs=bert_inputs, outputs=pred)
@@ -66,7 +66,7 @@ def build_crowd_model(max_seq_length, N_CLASSES, N_ANNOT):
     bert_inputs = [in_id, in_mask, in_segment]
 
     bert_output = BH.BertLayer(n_fine_tune_layers=3)(bert_inputs)
-    dense = Dense(256, activation='relu')(bert_output)
+    dense = Dense(32, activation='relu')(bert_output)
     pred = Dense(2, activation='softmax')(dense)
 
     #     model = Model(inputs=bert_inputs, outputs=pred)
