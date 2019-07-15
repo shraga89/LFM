@@ -29,7 +29,6 @@ dh.add_thresholded_flms(C.flms, C.ts, C.qs)
 dh.create_answers()
 dh.BERT_preprocess(C.max_seq_length)
 
-
 sess = tf.Session()
 tf.logging.set_verbosity(tf.logging.ERROR)
 
