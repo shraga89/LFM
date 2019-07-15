@@ -90,7 +90,6 @@ class DataHandler:
         self.df['candNameText'] = self.df['candName'].tolist()
         self.df['candText'] = [' '.join(t.replace(' ', '.').replace('_', '.').split('.')[0:max_seq_length]) for t in self.df['candNameText']]
         self.df['candText'] = [' '.join(re.findall('[A-Z][^A-Z]*', t[0:max_seq_length])).lower() for t in self.df['candText']]
-        print(self.df['candText'])
         self.df['targNameText'] = self.df['targName'].tolist()
         self.df['targText'] = [' '.join(t.replace(' ', '.').replace('_', '.').split('.')[0:max_seq_length]) for t in self.df['targNameText']]
         self.df['targText'] = [' '.join(re.findall('[A-Z][^A-Z]*', t[0:max_seq_length])).lower() for t in self.df['targText']]
