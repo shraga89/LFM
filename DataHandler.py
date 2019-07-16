@@ -74,7 +74,13 @@ class DataHandler:
             self.df[m] = np.where(self.df[m] > 0.0, 1.0, 0.0)
 
     def create_answers(self):
-        self.answers = self.df[self.matchers_list].values
+        sub_matcher_list =['AMC Token Path+Ontobuilder Dominants',
+                           'Ontobuilder Term Match+Ontobuilder Dominants',
+                           'Ontobuilder Term Match+Ontobuilder Threshold',
+                           'WordNet Jiang Conrath+Ontobuilder Dominants',
+                           'AMC Token Path+Ontobuilder Stable Marriage']
+        self.N_ANNOT = len(sub_matcher_list)
+        self.answers = self.df[sub_matcher_list].values
         self.answers_bin_missings = []
         for i in range(len(self.answers)):
             row = []
