@@ -4,6 +4,8 @@ from scipy.stats import mode
 import config as conf
 import utils as U
 import re
+from keras.preprocessing.text import Tokenizer
+from keras.preprocessing.sequence import pad_sequences
 
 
 class DataHandler:
@@ -93,3 +95,11 @@ class DataHandler:
         self.df['targNameText'] = self.df['targName'].tolist()
         self.df['targText'] = [' '.join(t.replace(' ', '.').replace('_', '.').split('.')[0:max_seq_length]) for t in self.df['targNameText']]
         self.df['targText'] = [' '.join(re.findall('[A-Z][^A-Z]*', t[0:max_seq_length])).lower() for t in self.df['targText']]
+
+    def glove_preprocess(self, max_seq_length):
+        t = Tokenizer()
+        t.fit_on_texts((self.df['candText'] + self.df['targText']).tolist())
+        self.df['candEncoded'] = t.texts_to_sequences(self.df['candText'])
+        self.df['targEncoded'] = t.texts_to_sequences(self.df['targText'])
+        self.df['candEncoded'] = pad_sequences(self.df['candEncoded'], maxlen=max_seq_length, padding='post')
+        self.df['targEncoded'] = pad_sequences(self.df['targEncoded'], maxlen=max_seq_length, padding='post')

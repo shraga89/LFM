@@ -9,6 +9,7 @@ from crowd_layer.crowd_aggregators import CrowdsCategoricalAggregator
 import BertHandler as BH
 import config as C
 from tensorflow.contrib.metrics import f1_score
+import numpy as np
 
 
 class F1score(object):
@@ -78,7 +79,7 @@ def bert_as_matcher(max_seq_length):
     bert_inputsB = [in_idB, in_maskB, in_segmentB]
     bert_outputB = BH.BertLayer(n_fine_tune_layers=3, name='bert_inputB')(bert_inputsB)
 
-    bert_output = Dot(1)([bert_outputA, bert_outputB])
+    bert_output = Dot(1, normalize=True)([bert_outputA, bert_outputB])
 
     # bert_output = BH.BertLayer(n_fine_tune_layers=3)(bert_inputs)
     pred = Dense(2, activation='softmax')(bert_output)
@@ -131,3 +132,15 @@ def remove_last_layer(model):
     model2.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     # print(model2.summary())
     return model2
+
+
+def load_glove(file):
+    embeddings_index = dict()
+    f = open(file)
+    for line in f:
+        values = line.split()
+        word = values[0]
+        coefs = np.asarray(values[1:], dtype='float32')
+        embeddings_index[word] = coefs
+    f.close()
+
