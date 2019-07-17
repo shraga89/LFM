@@ -2,7 +2,7 @@ import tensorflow as tf
 from tensorflow.keras import backend as K
 from tensorflow.keras import Sequential, Model
 from tensorflow.keras.layers import GRU, LSTM, Dense, TimeDistributed, Activation, Bidirectional, RepeatVector, \
-    Flatten, Permute, Dropout, Lambda, Reshape, UpSampling1D, Input, Multiply, Dot
+    Flatten, Permute, Dropout, Lambda, Reshape, UpSampling1D, Input, Multiply, Dot, Add
 import crowd_layer.crowd_layers, crowd_layer.crowd_aggregators
 from crowd_layer.crowd_layers import CrowdsClassification, MaskedMultiCrossEntropy
 from crowd_layer.crowd_aggregators import CrowdsCategoricalAggregator
@@ -54,7 +54,8 @@ def build_model(max_seq_length):
     bert_inputsB = [in_idB, in_maskB, in_segmentB]
     bert_outputB = BH.BertLayer(n_fine_tune_layers=3, name='bert_inputB')(bert_inputsB)
 
-    bert_output = Multiply()([bert_outputA, bert_outputB])
+    # bert_output = Multiply()([bert_outputA, bert_outputB])
+    bert_output = Add()([bert_outputA, bert_outputB])
 
     dense = Dense(32, activation='relu')(bert_output)
     pred = Dense(2, activation='softmax')(dense)
@@ -106,7 +107,8 @@ def build_crowd_model(max_seq_length, N_CLASSES, N_ANNOT):
     bert_inputsB = [in_idB, in_maskB, in_segmentB]
     bert_outputB = BH.BertLayer(n_fine_tune_layers=3, name='bert_inputB')(bert_inputsB)
 
-    bert_output = Multiply()([bert_outputA, bert_outputB])
+    # bert_output = Multiply()([bert_outputA, bert_outputB])
+    bert_output = Add()([bert_outputA, bert_outputB])
     dense = Dense(32, activation='relu')(bert_output)
     pred = Dense(2, activation='softmax')(dense)
 

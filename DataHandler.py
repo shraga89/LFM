@@ -97,10 +97,10 @@ class DataHandler:
     def BERT_preprocess(self, max_seq_length):
         self.df['candNameText'] = self.df['candName'].tolist()
         self.df['candText'] = [' '.join(t.replace(' ', '.').replace('_', '.').split('.')[0:max_seq_length]) for t in self.df['candNameText']]
-        self.df['candText'] = [' '.join(re.sub(r"([A-Z][a-z])", r" \1", t[0:max_seq_length]).split()).lower() for t in self.df['candText']]
+        self.df['candText'] = [' '.join(re.sub(r"([A-Z][a-z])", r" \1", t[0:max_seq_length]).split()) for t in self.df['candText']]
         self.df['targNameText'] = self.df['targName'].tolist()
         self.df['targText'] = [' '.join(t.replace(' ', '.').replace('_', '.').split('.')[0:max_seq_length]) for t in self.df['targNameText']]
-        self.df['targText'] = [' '.join(re.sub(r"([A-Z][a-z])", r" \1", t[0:max_seq_length]).split()).lower() for t in self.df['targText']]
+        self.df['targText'] = [' '.join(re.sub(r"([A-Z][a-z])", r" \1", t[0:max_seq_length]).split()) for t in self.df['targText']]
 
     def glove_preprocess(self, max_seq_length):
         t = Tokenizer()
