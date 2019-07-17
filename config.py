@@ -10,4 +10,4 @@ LABEL_COLUMN = 'exactMatch'
 folds = 5
 epochs = 5
 dftype = 'ICDM'
-filename = '../VectorsWFtrimmed.csv'
+filename = '../VectorsPO.csv'
