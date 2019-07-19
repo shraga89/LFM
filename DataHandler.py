@@ -43,7 +43,7 @@ class DataHandler:
         for chunk in pd.read_csv(self.file, low_memory=False, chunksize=10 ** 6):
             mylist.append(chunk)
             self.raw = pd.concat(mylist, axis=0)
-            self.raw = self.raw.fillna(value='empty')
+            self.raw = self.raw.fillna(value='0.0')
         del mylist
         self.raw['instance'], self.raw['alg'] = self.raw['instance'].str.replace(",", "+").str.split(pat="+", n=1).str
         self.raw = self.raw.drop(['realConf'], axis=1)
