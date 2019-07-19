@@ -47,6 +47,7 @@ class DataHandler:
         del mylist
         self.raw['instance'], self.raw['alg'] = self.raw['instance'].str.replace(",", "+").str.split(pat="+", n=1).str
         self.raw = self.raw.drop(['realConf'], axis=1)
+        self.raw['conf'].astype('float64')
 
     def load_raw_data_em(self):
         return None
