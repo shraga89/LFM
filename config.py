@@ -1,5 +1,6 @@
 N_CLASSES = 2
-flms = ['Ontobuilder Term Match', 'AMC Token Path', 'WordNet Jiang Conrath']
+# flms = ['Ontobuilder Term Match', 'AMC Token Path', 'WordNet Jiang Conrath']
+flms = ['title_title_lev_sim', 'authors_authors_lev_sim']
 ts = [0.2]
 qs = [0.5, 0.9, 0.99]
 max_seq_length = 256
@@ -10,4 +11,4 @@ LABEL_COLUMN = 'exactMatch'
 folds = 5
 epochs = 5
 dftype = 'ICDM'
-filename = '../VectorsPO.csv'
+filename = '../dblp_scholar_exp_data_em_dataset.csv'

@@ -29,7 +29,7 @@ def eval_model(model, test_data, test_labels, test_ids, eval, name, export = Fal
     temp['pred_non_binary' + name] = [p[1] for p in preds_test]
     i = len(eval)
     for pair in temp['instance'].unique():
-        matcher = np.where(temp[(temp['instance'] == pair)]['pred' + name] > 0.0, 1.0, 0.0)
+        matcher = np.where(temp[(temp['instance'] == pair)]['pred_non_binary' + name] > 0.0, 1.0, 0.0)
         exact = temp[(temp['instance'] == pair)]['real' + name]
         p, r, f = precision_recall_fscore_support(matcher, exact, average='binary')[:3]
         eval.loc[i] = np.array([pair, name, p, r, f])
