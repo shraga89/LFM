@@ -17,7 +17,7 @@ import time, datetime, os
 from tensorflow import keras
 
 os.environ['QT_QPA_PLATFORM'] = 'offscreen'
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
 config = tf.ConfigProto(device_count={'GPU': 2, 'CPU': 28})
 config.gpu_options.allow_growth = True
 config.gpu_options.per_process_gpu_memory_fraction = 0.95
