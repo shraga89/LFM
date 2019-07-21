@@ -26,7 +26,8 @@ keras.backend.set_session(sess)
 
 dh = DH.DataHandler(C.filename, C.dftype)
 dh.add_thresholded_flms(C.flms, C.ts, C.qs)
-dh.create_answers()
+_, updated_list = E.matchers_evaluation(dh.df, dh.matchers_list, False)
+dh.create_answers(updated_list)
 dh.BERT_preprocess(C.max_seq_length)
 t = dh.glove_preprocess(C.max_seq_length)
 vocab_size = len(t.word_index) + 1
@@ -47,7 +48,7 @@ i = 1
 for train_ix, test_ix in kfold.split(dh.df):
     train = dh.df.ix[train_ix]
     test = dh.df.ix[test_ix]
-    eval = E.matchers_evaluation(test, dh.matchers_list, False)
+    eval, _ = E.matchers_evaluation(test, dh.matchers_list, False)
     ts = time.time()
     st = datetime.datetime.fromtimestamp(ts).strftime('%d_%m_%Y_%H_%M')
     print("Starting fold " + str(i) + ' ' + str(st))

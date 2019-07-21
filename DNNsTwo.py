@@ -178,13 +178,13 @@ def bert_as_matcher(max_seq_length):
     in_maskA = Input(shape=(max_seq_length,), name="input_masksA")
     in_segmentA = Input(shape=(max_seq_length,), name="segment_idAs")
     bert_inputsA = [in_idA, in_maskA, in_segmentA]
-    bert_outputA = BH.BertLayer(n_fine_tune_layers=3, name='bert_inputA')(bert_inputsA)
+    bert_outputA = BH.BertLayer(n_fine_tune_layers=0, name='bert_inputA')(bert_inputsA)
 
     in_idB = Input(shape=(max_seq_length,), name="input_idsB")
     in_maskB = Input(shape=(max_seq_length,), name="input_masksB")
     in_segmentB = Input(shape=(max_seq_length,), name="segment_idsB")
     bert_inputsB = [in_idB, in_maskB, in_segmentB]
-    bert_outputB = BH.BertLayer(n_fine_tune_layers=3, name='bert_inputB')(bert_inputsB)
+    bert_outputB = BH.BertLayer(n_fine_tune_layers=0, name='bert_inputB')(bert_inputsB)
 
     pred = Dot(1, normalize=True)([bert_outputA, bert_outputB])
 
