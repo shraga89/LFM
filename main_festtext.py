@@ -31,7 +31,7 @@ dh.BERT_preprocess(C.max_seq_length)
 t = dh.glove_preprocess(C.max_seq_length)
 vocab_size = len(t.word_index) + 1
 
-embeddings_index = DNNsTwo.load_glove('../glove.6B/glove.6B.300d.txt')
+embeddings_index = DNNsTwo.load_glove('../crawl-300d-2M-subword/crawl-300d-2M-subword.vec')
 embedding_matrix = DNNsTwo.createEmbeddingMatrix(embeddings_index, vocab_size, t)
 
 sess = tf.Session()
@@ -71,7 +71,7 @@ for train_ix, test_ix in kfold.split(dh.df):
     # test, eval = E.eval_model(model, [test_input_ids, test_input_masks, test_segment_ids], test_labels,
     #                           test, eval, 'BertAsAMatcher', False)
     test, eval = E.eval_model(model, [test_examplesA, test_examplesB], test_labels,
-                              test, eval, 'GloveAsAMatcher', True, False)
+                              test, eval, 'FesttextAsAMatcher', True, False)
     # ------------------MAJORITY VOTE MODEL---------------
     # model = DNNs.build_model(C.max_seq_length)
     #
@@ -100,8 +100,7 @@ for train_ix, test_ix in kfold.split(dh.df):
     )
     test, eval = E.eval_model(model, [test_examplesA, test_examplesB]
                               , test_labels,
-                              test, eval, 'GloveMajority', False, False)
-
+                              test, eval, 'FesttextMajority', False, False)
     del model
     model = DNNsTwo.build_model_glove_lstm(vocab_size, embedding_matrix, C.max_seq_length)
     DNNsTwo.initialize_vars(sess)
@@ -115,7 +114,7 @@ for train_ix, test_ix in kfold.split(dh.df):
     )
     test, eval = E.eval_model(model, [test_examplesA, test_examplesB]
                               , test_labels,
-                              test, eval, 'GloveMajorityLSTM', False, False)
+                              test, eval, 'FesttextMajorityLSTM', False, False)
     # # ------------------AGGREGATED MODEL------------------
     # # del model
     # # model = DNNs.build_model(C.max_seq_length)
@@ -169,11 +168,10 @@ for train_ix, test_ix in kfold.split(dh.df):
     model = DNNsTwo.remove_last_layer(model)
     test, eval = E.eval_model(model, [test_examplesA, test_examplesB]
                               , test_labels,
-                              test, eval, 'GloveCrowd', False, False)
+                              test, eval, 'FesttextCrowd', False, False)
 
     del model
-    model = DNNsTwo.build_crowd_model_glove_lstm(vocab_size, embedding_matrix, C.max_seq_length, C.N_CLASSES,
-                                                 dh.N_ANNOT)
+    model = DNNsTwo.build_crowd_model_glove_lstm(vocab_size, embedding_matrix, C.max_seq_length, C.N_CLASSES, dh.N_ANNOT)
     DNNsTwo.initialize_vars(sess)
     model.fit(
         [train_examplesA, train_examplesB],
@@ -187,7 +185,7 @@ for train_ix, test_ix in kfold.split(dh.df):
     model = DNNsTwo.remove_last_layer(model)
     test, eval = E.eval_model(model, [test_examplesA, test_examplesB]
                               , test_labels,
-                              test, eval, 'GloveCrowdLSTM', False, False)
+                              test, eval, 'FesttextCrowdLSTM', False, False)
 
     res = pd.concat([res, test], ignore_index=True).drop_duplicates().reset_index(drop=True)
     eval_res = pd.concat([eval_res, eval], ignore_index=True).drop_duplicates().reset_index(drop=True)
@@ -199,7 +197,6 @@ for train_ix, test_ix in kfold.split(dh.df):
     #                      ignore_index=True).iloc[pd.concat([res, test],
     #                                                        ignore_index=True).astype(
     #     str).drop_duplicates().index].reset_index(drop=True)
-
     i += 1
 
 ts = time.time()
