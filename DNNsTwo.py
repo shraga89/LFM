@@ -3,7 +3,7 @@ from tensorflow.keras import backend as K
 from tensorflow.keras import Sequential, Model
 from tensorflow.keras.layers import GRU, LSTM, Dense, TimeDistributed, Activation, Bidirectional, RepeatVector, \
     Flatten, Permute, Dropout, Lambda, Reshape, UpSampling1D, Input, Multiply, Dot, Add, Embedding, BatchNormalization, \
-    Reshape
+    Reshape, GlobalMaxPool1D
 import crowd_layer.crowd_layers, crowd_layer.crowd_aggregators
 from crowd_layer.crowd_layers import CrowdsClassification, MaskedMultiCrossEntropy
 from crowd_layer.crowd_aggregators import CrowdsCategoricalAggregator
@@ -89,7 +89,8 @@ def build_model_bert_lstm(max_seq_length):
     # bert_output = Multiply()([bert_outputA, bert_outputB])
     bert_output = Add()([bert_outputA, bert_outputB])
     bert_output = Reshape((-1, 1))(bert_output)
-    bert_lstm = Bidirectional(LSTM(128, return_sequences=False, dropout=0.2, recurrent_dropout=0.1))(bert_output)
+    bert_lstm = Bidirectional(LSTM(128, return_sequences=True, dropout=0.2, recurrent_dropout=0.1))(bert_output)
+    bert_lstm = GlobalMaxPool1D()(bert_lstm)
     dense = Dense(64, activation='relu')(bert_lstm)
     pred = Dense(2, activation='softmax')(dense)
 
@@ -139,7 +140,8 @@ def build_model_glove_lstm(vocab_size, embedding_matrix, max_seq_length):
     # bert_output = Multiply()([bert_outputA, bert_outputB])
     glove_output = Add()([glove_outputA, glove_outputB])
     glove_output = Reshape((max_seq_length, 300))(glove_output)
-    glove_lstm = Bidirectional(LSTM(128, return_sequences=False, dropout=0.2, recurrent_dropout=0.1))(glove_output)
+    glove_lstm = Bidirectional(LSTM(128, return_sequences=True, dropout=0.2, recurrent_dropout=0.1))(glove_output)
+    glove_lstm = GlobalMaxPool1D()(glove_lstm)
     dense = Dense(64, activation='relu')(glove_lstm)
     pred = Dense(2, activation='softmax')(dense)
 
@@ -236,7 +238,8 @@ def build_crowd_model_bert_lstm(max_seq_length, N_CLASSES, N_ANNOT):
     # bert_output = Multiply()([bert_outputA, bert_outputB])
     bert_output = Add()([bert_outputA, bert_outputB])
     bert_output = Reshape((-1, 1))(bert_output)
-    bert_lstm = Bidirectional(LSTM(128, return_sequences=False, dropout=0.2, recurrent_dropout=0.1))(bert_output)
+    bert_lstm = Bidirectional(LSTM(128, return_sequences=True, dropout=0.2, recurrent_dropout=0.1))(bert_output)
+    bert_lstm = GlobalMaxPool1D()(bert_lstm)
     dense = Dense(64, activation='relu')(bert_lstm)
     pred = Dense(2, activation='softmax')(dense)
 
@@ -334,7 +337,8 @@ def build_crowd_model_glove_lstm(vocab_size, embedding_matrix, max_seq_length, N
     # bert_output = Multiply()([bert_outputA, bert_outputB])
     glove_output = Add()([glove_outputA, glove_outputB])
     glove_output = Reshape((max_seq_length, 300))(glove_output)
-    glove_lstm = Bidirectional(LSTM(128, return_sequences=False, dropout=0.2, recurrent_dropout=0.1))(glove_output)
+    glove_lstm = Bidirectional(LSTM(128, return_sequences=True, dropout=0.2, recurrent_dropout=0.1))(glove_output)
+    glove_lstm = GlobalMaxPool1D()(glove_lstm)
     dense = Dense(64, activation='relu')(glove_lstm)
     pred = Dense(2, activation='softmax')(dense)
 

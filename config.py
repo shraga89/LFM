@@ -1,5 +1,6 @@
 N_CLASSES = 2
-flms = ['Ontobuilder Term Match', 'AMC Token Path', 'WordNet Jiang Conrath']
+# flms = ['Ontobuilder Term Match', 'AMC Token Path', 'WordNet Jiang Conrath']
+flms =[]
 # flms = ['title_title_lev_sim', 'authors_authors_lev_sim']
 ts = [0.2]
 qs = [0.9, 0.99]
@@ -13,4 +14,5 @@ folds = 5
 epochs = 10
 batch_size = 32
 dftype = 'ICDM'
+# dftype = 'Standard'
 filename = '../VectorsPO.csv'
