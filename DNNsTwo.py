@@ -91,7 +91,7 @@ def build_model_bert_lstm(max_seq_length):
     bert_output = Reshape((-1, 1))(bert_output)
     bert_lstm = Bidirectional(LSTM(128, return_sequences=True, dropout=0.2, recurrent_dropout=0.1))(bert_output)
     bert_lstm = GlobalMaxPool1D()(bert_lstm)
-    bert_lstm = Dropout(0.2)(bert_lstm)
+    # bert_lstm = Dropout(0.2)(bert_lstm)
     dense = Dense(64, activation='relu')(bert_lstm)
     pred = Dense(2, activation='softmax')(dense)
 
@@ -143,7 +143,7 @@ def build_model_glove_lstm(vocab_size, embedding_matrix, max_seq_length):
     glove_output = Reshape((max_seq_length, 300))(glove_output)
     glove_lstm = Bidirectional(LSTM(128, return_sequences=True, dropout=0.2, recurrent_dropout=0.1))(glove_output)
     glove_lstm = GlobalMaxPool1D()(glove_lstm)
-    glove_lstm = Dropout(0.2)(glove_lstm)
+    # glove_lstm = Dropout(0.2)(glove_lstm)
     dense = Dense(64, activation='relu')(glove_lstm)
     pred = Dense(2, activation='softmax')(dense)
 
@@ -242,7 +242,7 @@ def build_crowd_model_bert_lstm(max_seq_length, N_CLASSES, N_ANNOT):
     bert_output = Reshape((-1, 1))(bert_output)
     bert_lstm = Bidirectional(LSTM(128, return_sequences=True, dropout=0.2, recurrent_dropout=0.1))(bert_output)
     bert_lstm = GlobalMaxPool1D()(bert_lstm)
-    bert_lstm = Dropout(0.2)(bert_lstm)
+    # bert_lstm = Dropout(0.2)(bert_lstm)
     dense = Dense(64, activation='relu')(bert_lstm)
     pred = Dense(2, activation='softmax')(dense)
 
@@ -342,7 +342,7 @@ def build_crowd_model_glove_lstm(vocab_size, embedding_matrix, max_seq_length, N
     glove_output = Reshape((max_seq_length, 300))(glove_output)
     glove_lstm = Bidirectional(LSTM(128, return_sequences=True, dropout=0.2, recurrent_dropout=0.1))(glove_output)
     glove_lstm = GlobalMaxPool1D()(glove_lstm)
-    glove_lstm = Dropout(0.2)(glove_lstm)
+    # glove_lstm = Dropout(0.2)(glove_lstm)
     dense = Dense(64, activation='relu')(glove_lstm)
     pred = Dense(2, activation='softmax')(dense)
 
