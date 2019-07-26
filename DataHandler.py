@@ -45,6 +45,7 @@ class DataHandler:
             self.raw = pd.concat(mylist, axis=0)
             self.raw = self.raw.fillna(value='0.0')
         del mylist
+        self.raw['conf'] = self.raw['conf'].fillna(0.0)
         self.raw['instance'], self.raw['alg'] = self.raw['instance'].str.replace(",", "+").str.split(pat="+", n=1).str
         self.raw = self.raw.drop(['realConf'], axis=1)
         self.raw['conf'].astype('float64')
