@@ -7,7 +7,7 @@ import networkx as nx
 import os
 
 os.environ['QT_QPA_PLATFORM'] = 'offscreen'
-ds_name = 'dblp_acm_exp_data'
+ds_name = 'dirty_dblp_acm_exp_data'
 path = '../ds_with_exact/Dirty/' + ds_name + '/exp_data/'
 
 
