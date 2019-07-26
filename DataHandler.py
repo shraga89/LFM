@@ -54,7 +54,6 @@ class DataHandler:
         return None
 
     def create_dataset(self):
-        print(self.raw['conf'])
         self.df = pd.DataFrame(pd.pivot_table(data=self.raw.copy(),
                                               index=['instance', 'candName', 'targName'],
                                               columns=['alg'],
