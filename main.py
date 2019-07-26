@@ -110,24 +110,24 @@ for train_ix, test_ix in kfold.split(dh.df):
     #     batch_size=32
     # )
     # test, eval = E.eval_model(model, [test_input_ids, test_input_masks, test_segment_ids], test_labels,
-    #                           test, eval, 'BertMajority', False)
-    del model
-    model = DNNsTwo.build_model_bert(C.max_seq_length)
-    DNNsTwo.initialize_vars(sess)
-    model.fit(
-        [train_input_idsA, train_input_masksA, train_segment_idsA] +
-        [train_input_idsB, train_input_masksB, train_segment_idsB],
-        train_mv_labels,
-        validation_data=([test_input_idsA, test_input_masksA, test_segment_idsA] +
-                         [test_input_idsB, test_input_masksB, test_segment_idsB],
-                         test_mv_labels),
-        epochs=C.epochs,
-        batch_size=C.batch_size
-    )
-    test, eval = E.eval_model(model, [test_input_idsA, test_input_masksA, test_segment_idsA] +
-                              [test_input_idsB, test_input_masksB, test_segment_idsB]
-                              , test_labels,
-                              test, eval, 'BertMajority', False, False)
+    # #                           test, eval, 'BertMajority', False)
+    # del model
+    # model = DNNsTwo.build_model_bert(C.max_seq_length)
+    # DNNsTwo.initialize_vars(sess)
+    # model.fit(
+    #     [train_input_idsA, train_input_masksA, train_segment_idsA] +
+    #     [train_input_idsB, train_input_masksB, train_segment_idsB],
+    #     train_mv_labels,
+    #     validation_data=([test_input_idsA, test_input_masksA, test_segment_idsA] +
+    #                      [test_input_idsB, test_input_masksB, test_segment_idsB],
+    #                      test_mv_labels),
+    #     epochs=C.epochs,
+    #     batch_size=C.batch_size
+    # )
+    # test, eval = E.eval_model(model, [test_input_idsA, test_input_masksA, test_segment_idsA] +
+    #                           [test_input_idsB, test_input_masksB, test_segment_idsB]
+    #                           , test_labels,
+    #                           test, eval, 'BertMajority', False, False)
 
     del model
     model = DNNsTwo.build_model_bert_lstm(C.max_seq_length)
@@ -205,24 +205,24 @@ for train_ix, test_ix in kfold.split(dh.df):
     #                           test, eval, 'BertCrowd', False, False)
     #
     # del model
-    # model = DNNsTwo.build_crowd_model_bert_lstm(C.max_seq_length, C.N_CLASSES, dh.N_ANNOT)
-    # DNNsTwo.initialize_vars(sess)
-    # model.fit(
-    #     [train_input_idsA, train_input_masksA, train_segment_idsA] +
-    #     [train_input_idsB, train_input_masksB, train_segment_idsB],
-    #     train_multi_labels,
-    #     validation_data=([test_input_idsA, test_input_masksA, test_segment_idsA] +
-    #                      [test_input_idsB, test_input_masksB, test_segment_idsB],
-    #                      test_multi_labels),
-    #     epochs=C.epochs,
-    #     batch_size=C.batch_size
-    # )
-    #
-    # model = DNNsTwo.remove_last_layer(model)
-    # test, eval = E.eval_model(model, [test_input_idsA, test_input_masksA, test_segment_idsA] +
-    #                           [test_input_idsB, test_input_masksB, test_segment_idsB]
-    #                           , test_labels,
-    #                           test, eval, 'BertCrowdLSTM', False, False)
+    model = DNNsTwo.build_crowd_model_bert_lstm(C.max_seq_length, C.N_CLASSES, dh.N_ANNOT)
+    DNNsTwo.initialize_vars(sess)
+    model.fit(
+        [train_input_idsA, train_input_masksA, train_segment_idsA] +
+        [train_input_idsB, train_input_masksB, train_segment_idsB],
+        train_multi_labels,
+        validation_data=([test_input_idsA, test_input_masksA, test_segment_idsA] +
+                         [test_input_idsB, test_input_masksB, test_segment_idsB],
+                         test_multi_labels),
+        epochs=C.epochs,
+        batch_size=C.batch_size
+    )
+
+    model = DNNsTwo.remove_last_layer(model)
+    test, eval = E.eval_model(model, [test_input_idsA, test_input_masksA, test_segment_idsA] +
+                              [test_input_idsB, test_input_masksB, test_segment_idsB]
+                              , test_labels,
+                              test, eval, 'BertCrowdLSTM', False, False)
 
     res = pd.concat([res, test], ignore_index=True).drop_duplicates().reset_index(drop=True)
     eval_res = pd.concat([eval_res, eval], ignore_index=True).drop_duplicates().reset_index(drop=True)
