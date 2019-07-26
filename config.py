@@ -15,4 +15,4 @@ epochs = 10
 batch_size = 32
 dftype = 'ICDM'
 # dftype = 'Standard'
-filename = '../dblp_scholar_exp_data_em_dataset.csv'
+filename = '../dblp_scholar.csv'
