@@ -7,8 +7,8 @@ import networkx as nx
 import os
 
 os.environ['QT_QPA_PLATFORM'] = 'offscreen'
-ds_name = 'dirty_dblp_scholar_exp_data'
-path = '../ds_with_exact/Dirty/' + ds_name + '/exp_data/'
+ds_name = 'abt_buy_exp_data'
+path = '../ds_with_exact/Textual/' + ds_name + '/exp_data/'
 
 
 def get_features(c, t):
