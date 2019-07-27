@@ -51,7 +51,25 @@ class DataHandler:
         self.raw['conf'] = self.raw['conf'].astype('float64')
 
     def load_raw_data_em(self):
-        return None
+        mylist = []
+        df = None
+        for chunk in pd.read_csv(self.file, low_memory=False, chunksize=10 ** 6):
+            mylist.append(chunk)
+            df = pd.concat(mylist, axis=0)
+            df = df.fillna(value='0.0')
+        del mylist
+        exact = df[df['instance'] ==
+                         '1 title_title_jac_qgm_3_qgm_3'][['instance', 'candName', 'targName', 'realConf']]
+        exact['instance'] = '1 exactMatch'
+        exact['conf'] = exact['realConf']
+        with_exact = pd.concat([df, exact])
+        with_exact['instance'] = with_exact['instance'].str.replace(' ', ',')
+        self.raw = with_exact
+        self.raw['conf'] = self.raw['conf'].fillna(0.0)
+        self.raw['instance'], self.raw['alg'] = self.raw['instance'].str.replace(",", "+").str.split(pat="+", n=1).str
+        self.raw = self.raw.drop(['realConf'], axis=1)
+        self.raw['conf'] = self.raw['conf'].astype('float64')
+
 
     def create_dataset(self):
         self.df = pd.DataFrame(pd.pivot_table(data=self.raw.copy(),
