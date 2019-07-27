@@ -29,8 +29,6 @@ dh.add_thresholded_flms(C.flms, C.ts, C.qs)
 _, updated_list = E.matchers_evaluation(dh.df, dh.matchers_list, False)
 dh.create_answers(updated_list)
 dh.BERT_preprocess(C.max_seq_length)
-print(dh.df['targText'])
-exit()
 t = dh.glove_preprocess(C.max_seq_length)
 vocab_size = len(t.word_index) + 1
 
