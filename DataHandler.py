@@ -59,7 +59,7 @@ class DataHandler:
             df = df.fillna(value='0.0')
         del mylist
         exact = df[df['instance'] ==
-                         '1 title_title_jac_qgm_3_qgm_3'][['instance', 'candName', 'targName', 'realConf']]
+                         '1,title_title_jac_qgm_3_qgm_3'][['instance', 'candName', 'targName', 'realConf']]
         exact['instance'] = '1 exactMatch'
         exact['conf'] = exact['realConf']
         with_exact = pd.concat([df, exact])
