@@ -13,6 +13,6 @@ LABEL_COLUMN = 'exactMatch'
 folds = 5
 epochs = 10
 batch_size = 32
-dftype = 'ICDM'
+dftype = 'Entities'
 # dftype = 'Standard'
 filename = '../dirty_dblp_scholar_exp_data_em_dataset.csv'

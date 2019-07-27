@@ -17,7 +17,7 @@ class DataHandler:
             self.load_raw_data()
         if dftype == 'ICDM':
             self.load_raw_data_icdm()
-        if dftype =='Entities':
+        if dftype == 'Entities':
             self.load_raw_data_em()
         self.df = None
         self.create_dataset()
