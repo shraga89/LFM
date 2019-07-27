@@ -29,6 +29,8 @@ dh.add_thresholded_flms(C.flms, C.ts, C.qs)
 _, updated_list = E.matchers_evaluation(dh.df, dh.matchers_list, False)
 dh.create_answers(updated_list)
 dh.BERT_preprocess(C.max_seq_length)
+print(dh.df['targText'])
+exit()
 t = dh.glove_preprocess(C.max_seq_length)
 vocab_size = len(t.word_index) + 1
 
@@ -41,7 +43,7 @@ tf.logging.set_verbosity(tf.logging.ERROR)
 # split = int((len(dh.df)*2)/3)
 res = None
 eval_res = None
-# dh.df = dh.df[:10]
+dh.df = dh.df[:10]
 kfold = KFold(C.folds, True, 1)
 label_list = [0, 1]
 i = 1

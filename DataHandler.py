@@ -88,7 +88,7 @@ class DataHandler:
             for q in qs:
                 self.df[flm + '_q=' + str(q)] = np.where(self.df[flm] >= self.df[flm].quantile(q), 1.0, 0.0)
             self.df = self.df.drop([flm], axis=1)
-        print(self.df.columns)
+        # print(self.df.columns)
         self.matchers_list = list(self.df.columns.drop(['instance', 'candName', 'targName', 'exactMatch']))
         self.N_ANNOT = len(self.matchers_list)
         for m in [matchers for matchers in self.matchers_list if '+' in matchers]:
@@ -113,11 +113,11 @@ class DataHandler:
 
     def BERT_preprocess(self, max_seq_length):
         self.df['candNameText'] = self.df['candName'].tolist()
-        self.df['candText'] = [' '.join(t.replace(' ', '.').replace('_', '.').split('.')) for t in self.df['candNameText']]
-        self.df['candText'] = [' '.join(re.sub(r"([A-Z][a-z])", r" \1", t).split()[0:max_seq_length]).lower() for t in self.df['candText']]
+        self.df['candText'] = [''.join([(i+1)*(v + ' ') for i, v in list(enumerate(t.split('.')))]) for t in self.df['candNameText']]
+        self.df['candText'] = [' '.join(re.sub(r"([A-Z][a-z])", r" \1", t).replace('_', ' ').split()[0:max_seq_length]).lower() for t in self.df['candText']]
         self.df['targNameText'] = self.df['targName'].tolist()
-        self.df['targText'] = [' '.join(t.replace(' ', '.').replace('_', '.').split('.')) for t in self.df['targNameText']]
-        self.df['targText'] = [' '.join(re.sub(r"([A-Z][a-z])", r" \1", t).split()[0:max_seq_length]).lower() for t in self.df['targText']]
+        self.df['targText'] = [''.join([(i+1)*(v + ' ') for i, v in list(enumerate(t.split('.')))]) for t in self.df['targNameText']]
+        self.df['targText'] = [' '.join(re.sub(r"([A-Z][a-z])", r" \1", t).replace('_', ' ').split()[0:max_seq_length]).lower() for t in self.df['targText']]
 
     def glove_preprocess(self, max_seq_length):
         t = Tokenizer()
