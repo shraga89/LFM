@@ -88,6 +88,7 @@ class DataHandler:
             for q in qs:
                 self.df[flm + '_q=' + str(q)] = np.where(self.df[flm] >= self.df[flm].quantile(q), 1.0, 0.0)
             self.df = self.df.drop([flm], axis=1)
+        print(self.df.columns)
         self.matchers_list = list(self.df.columns.drop(['instance', 'candName', 'targName', 'exactMatch']))
         self.N_ANNOT = len(self.matchers_list)
         for m in [matchers for matchers in self.matchers_list if '+' in matchers]:
