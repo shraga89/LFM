@@ -107,7 +107,7 @@ def convert_text_to_examples_pairs(texts_a, texts_b, labels):
     return InputExamples
 
 
-class BertLayer(tf.layers.Layer):
+class BertLayer(tf.keras.layers.Layer):
     def __init__(self, n_fine_tune_layers=10, **kwargs):
         self.n_fine_tune_layers = n_fine_tune_layers
         self.trainable = True
