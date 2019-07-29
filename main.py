@@ -1,3 +1,5 @@
+# pip install tensorflow-gpu
+# pip install keras
 # pip install bert-tensorflow
 # pip install tensorflow_hub
 # pip install tqdm
@@ -30,6 +32,7 @@ _, updated_list = E.matchers_evaluation(dh.df, dh.matchers_list, False)
 dh.create_answers(updated_list)
 dh.BERT_preprocess(C.max_seq_length)
 
+C.epochs = 2
 
 sess = tf.Session()
 tf.logging.set_verbosity(tf.logging.ERROR)
