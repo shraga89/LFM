@@ -9,7 +9,7 @@ from tensorflow.python.keras.layers import Layer, InputSpec
 from tensorflow.contrib.metrics import f1_score
 
 
-def init_identities(shape, partition_info, dtype=None):
+def init_identities(shape):
     out = np.zeros(shape)
     for r in range(shape[2]):
         for i in range(shape[0]):
