@@ -15,4 +15,4 @@ epochs = 5
 batch_size = 32
 # dftype = 'ICDM'
 dftype = 'Standard'
-filename = '../VectorsPO_full.csv'
+filename = '../VectorsWF_full.csv'
