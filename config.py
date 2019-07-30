@@ -15,4 +15,4 @@ epochs = 10
 batch_size = 32
 dftype = 'ICDM'
 # dftype = 'Standard'
-filename = '../dirty_dblp_scholar.csv'
+filename = '../dirty_dblp_acm.csv'
