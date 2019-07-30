@@ -1,7 +1,7 @@
 N_CLASSES = 2
 # flms = ['Ontobuilder Term Match', 'AMC Token Path', 'WordNet Jiang Conrath']
 # flms =[]
-flms = ['name_name_jac_qgm_3_qgm_3', 'description_description_lev_sim']
+flms = ['name_name_lev_sim', 'description_description_jac_qgm_3_qgm_3']
 ts = [0.2]
 qs = [0.9, 0.99]
 max_seq_length = 70
