@@ -15,4 +15,4 @@ epochs = 10
 batch_size = 32
 # dftype = 'ICDM'
 dftype = 'Standard'
-filename = '../VectorsOAEI.csv'
+filename = '../VectorsPO.csv'
