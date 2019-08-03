@@ -53,7 +53,7 @@ interest_cols = list(A.columns)
 K1 = ob.block_tables(A, B, 'name', 'name',
                      l_output_attrs=interest_cols,
                      r_output_attrs=interest_cols,
-                     overlap_size=3)
+                     overlap_size=1)
 # K1 = ob.block_candset(K1, 'de', 'authors', overlap_size=3)
 
 sim = em.get_sim_funs_for_matching()
