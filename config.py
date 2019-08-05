@@ -1,6 +1,6 @@
 N_CLASSES = 2
-flms = ['Ontobuilder Term Match', 'AMC Token Path', 'WordNet Jiang Conrath']
-# flms =[]
+# flms = ['Ontobuilder Term Match', 'AMC Token Path', 'WordNet Jiang Conrath']
+flms =[]
 # flms = ['title_title_jac_qgm_3_qgm_3', 'authors_authors_lev_sim']
 ts = [0.2]
 qs = [0.9, 0.99]
@@ -15,4 +15,4 @@ epochs = 10
 batch_size = 32
 dftype = 'ICDM'
 # dftype = 'Standard'
-filename = '../VectorsOAEI.csv'
+filename = '../VectorsPO.csv'
