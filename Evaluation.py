@@ -20,7 +20,7 @@ def matchers_evaluation(df, matchers, export=False):
         eval.sort_values(by='Matcher', ascending=True).to_csv('./matcher_quality.csv', index=False)
     temp_eval = eval.copy()
     temp_eval['F'] = temp_eval['F'].astype(float)
-    updated_list = temp_eval[['Matcher', 'F']].groupby('Matcher').mean().sort_values('F', ascending=False).index[:5].tolist()
+    updated_list = temp_eval[['Matcher', 'F']].groupby('Matcher').mean().sort_values('F', ascending=False).index[:].tolist()
     return eval, updated_list
 
 
